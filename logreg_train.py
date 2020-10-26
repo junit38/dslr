@@ -83,7 +83,7 @@ def getcostfunction(house):
 	cost = - sumtotal / 1600
 	return cost
 
-def getderive(house, lr):
+def getderivetheta0(house, lr):
 	index = 0
 	sumtotal = 0
 	while (index < 1600):
@@ -93,7 +93,38 @@ def getderive(house, lr):
 		else:
 			y = 0
 		if (not math.isnan(hx) and hx > 0):
-			sumtotal += ((hx - y) * house.getx(house.datasetx1[index], house.datasetx2[index]))
+			sumtotal += ((hx - y) * 1)
+		index = index + 1
+	derive = sumtotal * (lr / 1600)
+	return derive
+
+
+def getderivetheta1(house, lr):
+	index = 0
+	sumtotal = 0
+	while (index < 1600):
+		hx = house.getHx(house.datasetx1[index], house.datasetx2[index])
+		if (house.houses[index] == house.name):
+			y = 1
+		else:
+			y = 0
+		if (not math.isnan(hx) and hx > 0):
+			sumtotal += ((hx - y) * house.getnormalizedvalx1(house.datasetx1[index]))
+		index = index + 1
+	derive = sumtotal * (lr / 1600)
+	return derive
+
+def getderivetheta2(house, lr):
+	index = 0
+	sumtotal = 0
+	while (index < 1600):
+		hx = house.getHx(house.datasetx1[index], house.datasetx2[index])
+		if (house.houses[index] == house.name):
+			y = 1
+		else:
+			y = 0
+		if (not math.isnan(hx) and hx > 0):
+			sumtotal += ((hx - y) * house.getnormalizedvalx2(house.datasetx2[index]))
 		index = index + 1
 	derive = sumtotal * (lr / 1600)
 	return derive
@@ -101,47 +132,28 @@ def getderive(house, lr):
 
 def train(house):
 	oldcost = 0
-	lr = 0.1
+	lr = 10
 	diff = 1
-	while (abs(diff) > 0.00001):
+	while (abs(diff) > 0.0001):
 		cost = getcostfunction(house)
 		if (cost - oldcost > 0):
 			lr = lr * - 1
-		derive = getderive(house, lr)
-		house.theta0 = house.theta0 - derive
+		house.theta0 = house.theta0 - getderivetheta0(house, lr)
+		house.theta1 = house.theta1 - getderivetheta1(house, lr)
+		house.theta2 = house.theta2 - getderivetheta2(house, lr)
+		print("house.theta0", house.theta0)
+		print("house.theta1", house.theta1)
+		print("house.theta2", house.theta2)
+		print("cost", getcostfunction(house))
 		diff = cost - oldcost
 		oldcost = cost
-	oldcost = 0
-	diff = 1
-	while (abs(diff) > 0.00001):
-		cost = getcostfunction(house)
-		if (cost - oldcost > 0):
-			lr = lr * - 1
-		derive = getderive(house, lr)
-		house.theta1 = house.theta1 - derive
-		diff = cost - oldcost
-		oldcost = cost
-	diff = 1
-	oldcost = 0
-	while (abs(diff) > 0.00001):
-		cost = getcostfunction(house)
-		if (cost - oldcost > 0):
-			lr = lr * - 1
-		derive = getderive(house, lr)
-		house.theta2 = house.theta2 - derive
-		diff = cost - oldcost
-		oldcost = cost
-	print("house.theta0", house.theta0)
-	print("house.theta1", house.theta1)
-	print("house.theta2", house.theta2)
-	print("cost", getcostfunction(house))
 
 
 def prepare(df):
 	model = open("model", 'w')
 	house = House("Gryffindor")
-	house.datasetx1 = df["Flying"]
-	house.datasetx2 = df["Transfiguration"]
+	house.datasetx1 = df["Herbology"]
+	house.datasetx2 = df["Flying"]
 	house.houses = df["Hogwarts House"]
 	setminmax(house)
 	setcount(house)
@@ -156,8 +168,8 @@ def prepare(df):
 		iteration = iteration + 1
 	model.write(str(house.theta0) + "," + str(house.theta1) + "," + str(house.theta2) + "\n")
 	house = House("Ravenclaw")
-	house.datasetx1 = df["Charms"]
-	house.datasetx2 = df["Muggle Studies"]
+	house.datasetx1 = df["Flying"]
+	house.datasetx2 = df["Charms"]
 	house.houses = df["Hogwarts House"]
 	setminmax(house)
 	setcount(house)

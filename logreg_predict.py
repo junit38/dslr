@@ -94,8 +94,8 @@ def predict(df, model):
 		count = count + 1
 	index = 0
 	houseGryffindor = House("Gryffindor")
-	houseGryffindor.datasetx1 = df["Flying"]
-	houseGryffindor.datasetx2 = df["Transfiguration"]
+	houseGryffindor.datasetx1 = df["Herbology"]
+	houseGryffindor.datasetx2 = df["Flying"]
 	houseGryffindor.houses = df["Hogwarts House"]
 	setminmax(houseGryffindor)
 	setcount(houseGryffindor)
@@ -113,8 +113,8 @@ def predict(df, model):
 	print("theta1:", str(houseGryffindor.theta1))
 	print("theta2:", str(houseGryffindor.theta2))
 	houseRavenclaw = House("Ravenclaw")
-	houseRavenclaw.datasetx1 = df["Charms"]
-	houseRavenclaw.datasetx2 = df["Muggle Studies"]
+	houseRavenclaw.datasetx1 = df["Flying"]
+	houseRavenclaw.datasetx2 = df["Charms"]
 	houseRavenclaw.houses = df["Hogwarts House"]
 	setminmax(houseRavenclaw)
 	setcount(houseRavenclaw)
@@ -150,9 +150,7 @@ def predict(df, model):
 	print("theta0:", str(houseSlytherin.theta0))
 	print("theta1:", str(houseSlytherin.theta1))
 	print("theta2:", str(houseSlytherin.theta2))
-	error = 0
 	while (index < count):
-		# print(df["Hogwarts House"][index])
 		if (houseGryffindor.getx(houseGryffindor.datasetx1[index], houseGryffindor.datasetx2[index]) < 0):
 			house = "Gryffindor"
 		elif (houseRavenclaw.getx(houseRavenclaw.datasetx1[index], houseRavenclaw.datasetx2[index]) < 0):
@@ -161,31 +159,8 @@ def predict(df, model):
 			house = "Slytherin"
 		else:
 			house = "Hufflepuff"
-		if (df["Hogwarts House"][index] and house != df["Hogwarts House"][index]):
-			print(df["Hogwarts House"][index])
-			hx = houseGryffindor.getx(houseGryffindor.datasetx1[index], houseGryffindor.datasetx2[index])
-			print(hx)
-			hx = houseRavenclaw.getx(houseRavenclaw.datasetx1[index], houseRavenclaw.datasetx2[index])
-			print(hx)
-			hx = houseSlytherin.getx(houseSlytherin.datasetx1[index], houseSlytherin.datasetx2[index])
-			print(hx)
-			error = error + 1
-			print(house)
-		elif (df["Hogwarts House"][index]):
-			hx1 = houseGryffindor.getx(houseGryffindor.datasetx1[index], houseGryffindor.datasetx2[index])
-			hx2 = houseRavenclaw.getx(houseRavenclaw.datasetx1[index], houseRavenclaw.datasetx2[index])
-			hx3 = houseSlytherin.getx(houseSlytherin.datasetx1[index], houseSlytherin.datasetx2[index])
-			if (math.isnan(hx1) or math.isnan(hx2) or math.isnan(hx3)):
-				print(index)
-				print("hx1:", hx1)
-				print("hx2:", hx2)
-				print("hx3:", hx3)
-				print(house)
-				error = error + 1
-		# print(house)
 		csv.write(str(index) + "," + house + "\n")
 		index = index + 1
-	print("Error", error)
 
 
 def main():
