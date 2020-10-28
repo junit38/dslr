@@ -185,7 +185,7 @@ def prepare(df):
 	model.write(str(house.theta0) + "," + str(house.theta1) + "," + str(house.theta2) + "\n")
 	house = House("Slytherin")
 	house.datasetx1 = df["Divination"]
-	house.datasetx2 = df["Defense Against the Dark Arts"]
+	house.datasetx2 = df["Transfiguration"]
 	house.houses = df["Hogwarts House"]
 	setminmax(house)
 	setcount(house)

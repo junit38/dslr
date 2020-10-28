@@ -133,7 +133,7 @@ def predict(df, model):
 	print("theta2:", str(houseRavenclaw.theta2))
 	houseSlytherin = House("Slytherin")
 	houseSlytherin.datasetx1 = df["Divination"]
-	houseSlytherin.datasetx2 = df["Defense Against the Dark Arts"]
+	houseSlytherin.datasetx2 = df["Transfiguration"]
 	houseSlytherin.houses = df["Hogwarts House"]
 	setminmax(houseSlytherin)
 	setcount(houseSlytherin)
