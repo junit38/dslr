@@ -14,10 +14,10 @@ def main():
         dataset = open(str(sys.argv[1]), 'r')
         df = pandas.read_csv(dataset)
         df = df.drop(columns=['Index', 'First Name', 'Last Name', 'Birthday', 'Best Hand'])
-        # sns.pairplot(df, hue='Hogwarts House', markers=".")
-        # plt.show()
-        fig = px.scatter_matrix(df, color="Hogwarts House")
-        fig.show()
+        sns.pairplot(df, hue='Hogwarts House', markers=".")
+        plt.show()
+        #fig = px.scatter_matrix(df, color="Hogwarts House")
+        #fig.show()
         dataset.close()
 
 if __name__ == "__main__":
